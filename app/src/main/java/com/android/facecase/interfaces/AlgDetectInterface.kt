@@ -1,6 +1,8 @@
 package com.android.facecase.interfaces
 
+import com.android.facecase.data.CameraImage
 import com.imi.sdk.face.FaceInfo
+import com.imi.sdk.face.Frame
 
 /**
  * @author：TianLong

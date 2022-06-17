@@ -8,7 +8,7 @@ import com.android.facecase.interfaces.BaseInterface
 open abstract class BaseActivity : AppCompatActivity(), BaseInterface {
     var TAG = "BaseActivity"
 
-    override fun openActivity(clazz: Class<FaceActivity>) {
+    override fun openActivity(clazz: Class<NormalActivity>) {
         val intent = Intent(this,clazz)
         startActivity(intent)
     }

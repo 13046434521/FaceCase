@@ -10,12 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FaceCase">
+        android:theme="@style/Theme.Design.Light.NoActionBar">
         <activity
             android:name=".detail.FaceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity2"
             android:exported="false" />
         <activity
             android:name=".detail.BaseActivity"

@@ -1,8 +1,6 @@
 package com.android.facecase.interfaces
 
-import com.imi.sdk.face.FaceInfo
-import com.imi.sdk.face.Frame
-import com.imi.sdk.face.Session
+import com.imi.sdk.face.*
 
 /**
  * @author：TianLong
@@ -14,11 +12,11 @@ interface FaceInterface {
 
     fun startFaceAlg()
 
-    fun detectFace(frame:Frame?)
+    fun detectFace(frame:Frame?):FaceInfo?
 
-    fun detectLiveness(frame:Frame?,faceInfo: FaceInfo)
+    fun detectLiveness(frame:Frame?,faceInfo: FaceInfo):LivenessResult?
 
-    fun detectQuality(frame:Frame?)
+    fun detectQuality(frame:Frame?):FaceQuality?
 
     fun releaseFace(session: Session?)
 }

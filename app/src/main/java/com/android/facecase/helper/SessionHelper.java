@@ -43,7 +43,7 @@ public class SessionHelper {
         sessionConfig.camera = ImiCamera.getInstance();
         // 授权信息
         sessionConfig.appKey = APP_KEY;
-        sessionConfig.livenessMode = LivenessMode.INFRARED;
+        sessionConfig.livenessMode = LivenessMode.FAR;
 
         sessionConfig.isCpuAuthorization = false;
         sessionConfig.isIRExposure = false;

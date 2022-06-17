@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import com.android.facecase.R
 import com.android.facecase.helper.PermissionHelper
-import com.android.facecase.helpkt.ImiCameraHelper
+import com.android.facecase.helpkt.CameraHelper
 import com.imi.camera.listener.OnOpenCameraListener
 
 class MainActivity : BaseActivity() ,OnOpenCameraListener{
@@ -13,7 +13,7 @@ class MainActivity : BaseActivity() ,OnOpenCameraListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ImiCameraHelper.init(this,this)
+        CameraHelper.initialize(this,this)
     }
 
     override fun onOpenCameraError(p0: String?) {
@@ -26,10 +26,10 @@ class MainActivity : BaseActivity() ,OnOpenCameraListener{
     }
 
     fun onNormal(view: View) {
-        openActivity(FaceActivity::class.java)
+        openActivity(NormalActivity::class.java)
     }
 
-    override fun openActivity(clazz: Class<FaceActivity>){
+    override fun openActivity(clazz: Class<NormalActivity>){
         if (!PermissionHelper.hasCameraPermission(this)||!PermissionHelper.hasStoragePermission(this)){
             PermissionHelper.requestPermission(this, arrayOf(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE),1)
             return
