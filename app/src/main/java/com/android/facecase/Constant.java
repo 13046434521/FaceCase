@@ -1,5 +1,7 @@
 package com.android.facecase;
 
+import com.android.facecase.detail.BaseActivity;
+import com.android.facecase.detail.FaceActivity;
 import com.android.facecase.helper.FileHelper;
 
 import java.util.Optional;

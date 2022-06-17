@@ -1,5 +1,6 @@
 package com.android.facecase.interfaces
 
+import androidx.appcompat.app.AppCompatActivity
 import com.android.facecase.detail.FaceActivity
 import com.android.facecase.detail.NormalActivity
 
@@ -9,6 +10,6 @@ import com.android.facecase.detail.NormalActivity
  * @detail：
  */
 interface BaseInterface {
-    fun openActivity(clazz: Class<NormalActivity>)
+    fun <T>openActivity(clazz: Class<T>)
 
 }

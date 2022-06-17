@@ -3,6 +3,7 @@ package com.android.facecase.detail
 import android.Manifest
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.android.facecase.R
 import com.android.facecase.helper.PermissionHelper
 import com.android.facecase.helpkt.CameraHelper
@@ -29,7 +30,7 @@ class MainActivity : BaseActivity() ,OnOpenCameraListener{
         openActivity(NormalActivity::class.java)
     }
 
-    override fun openActivity(clazz: Class<NormalActivity>){
+    override fun <T> openActivity (clazz: Class<T>){
         if (!PermissionHelper.hasCameraPermission(this)||!PermissionHelper.hasStoragePermission(this)){
             PermissionHelper.requestPermission(this, arrayOf(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE),1)
             return
