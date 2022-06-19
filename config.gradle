@@ -1,0 +1,30 @@
+ext {
+    androidId = [
+            compileSdkVersion         : 30,
+            minSdkVersion             : 21,
+            targetSdkVersion          : 30,
+            versionCode               : 1,
+            versionName               : "1.0.0",
+            testInstrumentationRunnerL: "android.support.test.runner.AndroidJUnitRunner"
+    ]
+    ndkAbiFilters = {
+        ndk{
+            abiFilters 'armeabi-v7a'//32位库
+            abiFilters 'arm64-v8a'  //64位库
+        }
+    }
+    java_version = {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    common_dependencies = {
+        implementation 'com.android.support:appcompat-v7:28.0.0'
+    }
+
+    test_dependencies={
+        testImplementation 'junit:junit:4.+'
+        androidTestImplementation 'com.android.support.test:runner:1.0.2'
+        androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    }
+}

@@ -39,4 +39,8 @@ class MainActivity : BaseActivity() ,OnOpenCameraListener{
             super.openActivity(clazz)
         }
     }
+
+    fun onLiveness(view: View) {
+        openActivity(LivenessActivity::class.java)
+    }
 }

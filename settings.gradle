@@ -14,4 +14,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "FaceCase"
-include ':app'
+include ':app',':androidUtils'
+project(':androidUtils').projectDir= file('F:\\HJIMI\\AndroidProjectDemo\\ImageUtils\\androidutils')

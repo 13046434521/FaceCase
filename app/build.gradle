@@ -15,10 +15,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        ndk {
-            abiFilters 'armeabi-v7a'//32位库
-//            abiFilters 'arm64-v8a'  //64位库
-        }
+        ndkAbiFilters
     }
 
     buildTypes {
@@ -34,6 +31,11 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+
+    packagingOptions {
+        pickFirst "lib/armeabi-v7a/libopencv_java3.so"
+        pickFirst "lib/arm64-v8a/libopencv_java3.so"
+    }
 }
 
 dependencies {
@@ -48,5 +50,6 @@ dependencies {
 
 //    implementation(name:'ImiFaceSdk_faceidcom_04.00.00.220524_1.2.7-debug',ext:'aar')
     implementation files('libs/ImiFaceSdk_faceidcom_04.00.00.220524_1.2.7debug.aar')
-    implementation 'com.github.13046434521:glsurface:v1.0.9'
+    implementation project(':androidUtils')
+    implementation ('com.github.13046434521:glsurface:v1.0.9')
 }
