@@ -22,7 +22,7 @@ class MainActivity : BaseActivity() ,OnOpenCameraListener{
     }
 
     override fun onOpenCameraSuccess() {
-        showToast("成功")
+        showToast("成功:sn:${CameraHelper.camera.sn}  uvc:${CameraHelper.camera.uvcVersion}")
         isCameraSuccess = true
     }
 

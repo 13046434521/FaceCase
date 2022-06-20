@@ -76,7 +76,7 @@ class NormalActivity : FaceActivity() , OnFrameAvailableListener ,AlgInitInterfa
 
     override fun faceAlgEndInterface(
         cameraImage:CameraImage?,
-        rect: com.imi.sdk.facebase.utils.Rect?,
+        rect: Rect?,
         livenessResult: LivenessResult?,
         quality: FaceQuality?
     ) {
@@ -97,6 +97,4 @@ class NormalActivity : FaceActivity() , OnFrameAvailableListener ,AlgInitInterfa
             contentTextView.setText(stringBuilder.toString())
         }
     }
-
-
 }

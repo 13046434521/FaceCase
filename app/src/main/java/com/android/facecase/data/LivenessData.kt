@@ -1,20 +1,15 @@
 package com.android.facecase.data
 
-import android.graphics.Bitmap
-import com.android.facecase.Constant
+import android.util.Log
 import com.android.facecase.helpkt.DataHelper
 import com.android.utils.ImageUtils
 import com.imi.camera.camera.CameraFrame
 import com.imi.sdk.facebase.utils.ImageData
-import com.imi.sdk.faceid.dl.internal.ImiUtil
-import com.imi.sdk.utils.NativeUtils
 import java.nio.ByteBuffer
 import com.android.facecase.Constant.IMAGE_WIDTH
 import com.android.facecase.Constant.IMAGE_HEIGHT
 import com.android.facecase.helper.FileHelper
 import com.android.utils.ImageUtils.ImreadModes.*
-import com.imi.sdk.faceid.dl.internal.ImiUtil.*
-import com.imi.sdk.utils.NativeUtils.copyByteBufferData
 import java.nio.ByteOrder
 
 /**
@@ -24,15 +19,15 @@ import java.nio.ByteOrder
  */
 class LivenessData :DataHelper<CameraFrame,CameraImage?> {
     lateinit var rgbBuffer :ByteBuffer
-    lateinit var bgrBuffer :ByteBuffer
+    lateinit var irRgbBuffer :ByteBuffer
     lateinit var depthBuffer :ByteBuffer
     lateinit var irBuffer : ByteBuffer
     lateinit var rgbPath :String
     lateinit var depthPath :String
     lateinit var irPath :String
-    private var count = "0001"
+    private var count = 0
     val cameraImage: CameraImage by lazy {
-        bgrBuffer = ByteBuffer.allocateDirect(IMAGE_WIDTH * IMAGE_HEIGHT *3).order(ByteOrder.nativeOrder())
+        irRgbBuffer = ByteBuffer.allocateDirect(IMAGE_WIDTH * IMAGE_HEIGHT *3).order(ByteOrder.nativeOrder())
         rgbBuffer = ByteBuffer.allocateDirect(IMAGE_WIDTH * IMAGE_HEIGHT *3).order(ByteOrder.nativeOrder())
         depthBuffer = ByteBuffer.allocateDirect(IMAGE_WIDTH * IMAGE_HEIGHT *2).order(ByteOrder.nativeOrder())
         irBuffer = ByteBuffer.allocateDirect(IMAGE_WIDTH * IMAGE_HEIGHT *2).order(ByteOrder.nativeOrder())
@@ -56,12 +51,14 @@ class LivenessData :DataHelper<CameraFrame,CameraImage?> {
         // k?.代表着 不为空的时候执行，为空不执行
         // k!!.代表着 不为空的时候执行，为空的时候抛异常
         cameraImage.let {
-            // opengcv读取为bgr，需要转换为rgb
+            cameraImage.dataName = rgbPath
+            //opencv 读取jpg,png数据
             ImageUtils.readRgbBufferByOpenCV(rgbPath,rgbBuffer)
             ImageUtils.readBufferByOpenCV(depthPath,depthBuffer, IMREAD_UNCHANGED)
             ImageUtils.readBufferByOpenCV(irPath,irBuffer,IMREAD_UNCHANGED)
-//            ImageUtils.bgr2rgb(bgrBuffer,rgbBuffer,IMAGE_WIDTH, IMAGE_HEIGHT)
-
+            // 2通道红外数据转换成3通道RGB数据
+//            ImiUtil.irDataToRgb(irRgbBuffer,ir2Buffer,IMAGE_WIDTH, IMAGE_HEIGHT)
+            //拷贝数据 至 cameraImage中
             ImageUtils.copyByteBuffer(rgbBuffer, it.faceImage.imageData)
             ImageUtils.copyByteBuffer(depthBuffer, it.depthImage.imageData)
             ImageUtils.copyByteBuffer(irBuffer, it.irImage.imageData)
@@ -71,8 +68,20 @@ class LivenessData :DataHelper<CameraFrame,CameraImage?> {
     }
 
     private fun handlePath() {
-        rgbPath = "${FileHelper.getInstance().faceTestFolderPath}${count}_color.jpg"
-        depthPath = rgbPath.replace("_color.jpg",".depth.png")
-        irPath = rgbPath.replace("_color.jpg",".infrared.png")
+        count++
+        rgbPath = "${FileHelper.getInstance().faceTestFolderPath}liveness/${count}_color.jpg"
+        when(count){
+            in 1 until 10->rgbPath = rgbPath.replace("${count}","000${count}")
+            in 10 until 100->rgbPath = rgbPath.replace("${count}","00${count}")
+            in 100 until 1000->rgbPath = rgbPath.replace("${count}","0${count}")
+            else->{
+                rgbPath = "${FileHelper.getInstance().faceTestFolderPath}liveness/1000_color.jpg"
+            }
+        }
+
+        depthPath = rgbPath.replace("_color.jpg","_depth.png")
+        irPath = rgbPath.replace("_color.jpg","_infrared.png")
+
+        Log.w("JTL_PATH",rgbPath)
     }
 }

@@ -15,56 +15,69 @@ import kotlin.concurrent.thread
 object FaceHelper : FaceInterface {
     var TAG = "FaceTest"
     var isAlgSuccess = false
-    var isFace:Boolean = false
-    var algInitInterface:AlgInitInterface ?= null
-    var algDetectInterface:AlgDetectInterface? = null
-    var algLivenessInterface:AlgLivenessInterface? = null
-    var algQualityInterface:AlgQualityInterface? = null
-    var algFaceInterface:AlgFaceInterface? = null
-    var algFaceEndInterface:AlgFaceEndInterface? = null
-    var algReleaseInterface:AlgReleaseInterface? = null
-    lateinit var faceThread:Thread
-    override fun initFace(session: Session?) {
-        session?.initializeAsync{ i, s ->
-            isAlgSuccess =(i==ResultCode.OK)
-            Log.d(TAG,"initAlg: $i $s  $isAlgSuccess")
+    var isFace: Boolean = false
+    var algInitInterface: AlgInitInterface? = null
+    var algDetectInterface: AlgDetectInterface? = null
+    var algLivenessInterface: AlgLivenessInterface? = null
+    var algQualityInterface: AlgQualityInterface? = null
+    var algFaceInterface: AlgFaceInterface? = null
+    var algFaceEndInterface: AlgFaceEndInterface? = null
+    var algReleaseInterface: AlgReleaseInterface? = null
+    lateinit var faceThread: Thread
 
-            algInitInterface?.initAlgInterface(i,s, isAlgSuccess)
+    var detectTime:Long = 0L
+    var livenessTime:Long = 0L
+    var qualityTime:Long = 0L
+    override fun initFace(session: Session?) {
+        session?.initializeAsync { i, s ->
+            isAlgSuccess = (i == ResultCode.OK)
+            Log.d(TAG, "initAlg: $i $s  $isAlgSuccess")
+
+            algInitInterface?.initAlgInterface(i, s, isAlgSuccess)
         }
     }
 
     override fun startFaceAlg() {
         faceThread = thread {
             isFace = true
-            while (isFace){
-                val cameraImage =algFaceInterface?.faceAlgInterface()
+            while (isFace) {
+                val cameraImage = algFaceInterface?.faceAlgInterface()
                 val frame = cameraImage?.frame
-                var rect: Rect? = null
+                var rect: Rect?
                 var livenessResult: LivenessResult? = null
                 var quality: FaceQuality? = null
-                algDetectInterface?.let {
-                    val faceInfo =detectFace(frame)
-                    rect = faceInfo?.faceRect
-                    algLivenessInterface?.let {
-                        if (faceInfo != null) {
-                            livenessResult =  detectLiveness(frame, faceInfo)
-                        }
-                    }
 
-                    algQualityInterface?.let {
-                       quality =  detectQuality(frame)
+                val faceInfo = detectFace(frame)
+                rect = faceInfo?.faceRect
+                algLivenessInterface?.let {
+                    if (faceInfo != null) {
+                        livenessResult = detectLiveness(frame, faceInfo)
                     }
                 }
 
-                algFaceEndInterface?.faceAlgEndInterface(cameraImage,rect,livenessResult, quality)
+                algQualityInterface?.let {
+                    quality = detectQuality(frame)
+                }
+
+
+                algFaceEndInterface?.faceAlgEndInterface(cameraImage, rect?.let {
+                    android.graphics.Rect(
+                        it.x,
+                        it.y,
+                        it.x + it.width,
+                        it.y + it.height
+                    )
+                }, livenessResult, quality)
             }
         }
     }
 
     override fun detectFace(frame: Frame?): FaceInfo? {
+        val tt = System.currentTimeMillis()
         val faceInfos = frame?.detectFaces()
-        if (faceInfos!=null&& faceInfos.isNotEmpty()){
-            val faceInfo = faceInfos.get(0)
+        detectTime = System.currentTimeMillis() - tt
+        if (faceInfos != null && faceInfos.isNotEmpty()) {
+            val faceInfo = faceInfos[0]
             algDetectInterface?.detectAlgInterface(faceInfo)
             return faceInfo
         }
@@ -72,15 +85,20 @@ object FaceHelper : FaceInterface {
         return null
     }
 
-    override fun detectLiveness(frame: Frame?,faceInfo: FaceInfo) :LivenessResult?{
+    override fun detectLiveness(frame: Frame?, faceInfo: FaceInfo): LivenessResult? {
+        val tt = System.currentTimeMillis()
         val livenessResult = frame?.detectLiveness(faceInfo)
+        livenessTime = System.currentTimeMillis() - tt
 
         algLivenessInterface?.livenessAlgInterface(livenessResult)
         return livenessResult
     }
 
-    override fun detectQuality(frame: Frame?):FaceQuality? {
+    override fun detectQuality(frame: Frame?): FaceQuality? {
+        val tt = System.currentTimeMillis()
         val faceQuality = frame?.detectFaceQuality()
+        qualityTime = System.currentTimeMillis() - tt
+
         algQualityInterface?.qualityInterface(faceQuality)
 
         return faceQuality
@@ -88,11 +106,11 @@ object FaceHelper : FaceInterface {
 
 
     override fun releaseFace(session: Session?) {
-        if (isFace){
+        if (isFace) {
             isFace = false
             faceThread.join(1000)
         }
-        if (isAlgSuccess){
+        if (isAlgSuccess) {
             session?.release()
             isAlgSuccess = true
         }

@@ -1,11 +1,9 @@
 package com.android.facecase.interfaces
 
+import android.graphics.Rect
 import com.android.facecase.data.CameraImage
-import com.imi.sdk.face.FaceInfo
 import com.imi.sdk.face.FaceQuality
-import com.imi.sdk.face.Frame
 import com.imi.sdk.face.LivenessResult
-import com.imi.sdk.facebase.utils.Rect
 
 /**
  * @author：TianLong
@@ -13,5 +11,5 @@ import com.imi.sdk.facebase.utils.Rect
  * @detail：
  */
 interface AlgFaceEndInterface {
-    fun faceAlgEndInterface(cameraImage: CameraImage?,rect:Rect?,livenessResult: LivenessResult?,quality: FaceQuality?)
+    fun faceAlgEndInterface(cameraImage: CameraImage?, rect: Rect?, livenessResult: LivenessResult?, quality: FaceQuality?)
 }
