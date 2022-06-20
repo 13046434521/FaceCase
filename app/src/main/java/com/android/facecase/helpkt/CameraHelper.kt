@@ -23,7 +23,6 @@ object CameraHelper {
     fun initialize(context: Context, onOpenCameraListener: OnOpenCameraListener, path:String = FileHelper.getInstance().faceImiBinFolderPath, isSupportIr: Boolean = true, config: CameraConfig =cameraConfig) {
         camera = ImiCamera.getInstance()
         camera.open(context,path,isSupportIr,onOpenCameraListener)
-
     }
 
     // 注意640 * 480分辨率在以上支持列表中，目前算法仅支持该分辨率
