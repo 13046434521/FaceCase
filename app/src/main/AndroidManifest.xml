@@ -26,6 +26,12 @@
             android:name=".detail.NormalActivity"
             android:exported="false" />
         <activity
+            android:name=".detail.SpoofActivity"
+            android:exported="false" />
+        <activity
+            android:name=".detail.QualityActivity"
+            android:exported="false" />
+        <activity
             android:name=".detail.MainActivity"
             android:exported="true">
             <intent-filter>

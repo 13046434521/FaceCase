@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.android.facecase.Constant
 import com.android.facecase.R
 import com.android.facecase.data.CameraImage
@@ -15,7 +16,12 @@ import com.imi.sdk.face.FaceQuality
 import com.imi.sdk.face.LivenessResult
 import com.jtl.surface.gl.DepthGLSurface
 import com.jtl.surface.gl.RgbGLSurface
-
+import kotlinx.coroutines.launch
+/**
+ * @author：TianLong
+ * @date：2022/6/13 13:52
+ * @detail：活体Activity，测试人脸活体（1000张活体数据）
+ */
 class LivenessActivity : FaceActivity() ,AlgInitInterface, AlgFaceInterface,AlgDetectInterface,AlgLivenessInterface,AlgFaceEndInterface {
     private val rgbSurface by lazy<RgbGLSurface> { findViewById(R.id.rgb_liveness_surface) }
     private val depthSurface by lazy<DepthGLSurface> { findViewById(R.id.depth_liveness_surface) }
@@ -24,13 +30,13 @@ class LivenessActivity : FaceActivity() ,AlgInitInterface, AlgFaceInterface,AlgD
     private val contentTextView by lazy<TextView> { findViewById(R.id.tv_liveness_content) }
     private val livenessData:LivenessData = LivenessData()
 
-    private var livenessCount =0L
-    private var livenessTotalTime = 0L
-    private var avgLiveTime = 0L
-    private var detectCount = 0
-    private var detectTotalTime = 0L
-    private var avgDetectTime = 0L
-    private var livenessSuccessCount =0L
+    private var livenessCount =0F
+    private var livenessTotalTime = 0F
+    private var avgLiveTime = 0F
+    private var detectCount = 0F
+    private var detectTotalTime = 0F
+    private var avgDetectTime = 0F
+    private var livenessSuccessCount =0F
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_liveness)

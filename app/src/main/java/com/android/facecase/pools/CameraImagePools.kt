@@ -8,7 +8,7 @@ import java.nio.ByteOrder
 /**
  * @author：TianLong
  * @date：2022/6/16 16:32
- * @detail：
+ * @detail： CameraImage 复用池
  */
 class CameraImagePools(width: Int = 480, height: Int = 640) : Pools<CameraImage>() {
     private var imageWidth = width

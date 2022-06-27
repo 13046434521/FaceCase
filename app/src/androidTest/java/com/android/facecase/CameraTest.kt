@@ -31,7 +31,7 @@ class CameraTest :OnOpenCameraListener{
         Log.w(TAG,"test")
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
-        for (index in 1..10000){
+        for (index in 1 until 10000){
             cyclicBarrier.reset()
             CameraHelper.initialize(appContext,this)
             cyclicBarrier.await()

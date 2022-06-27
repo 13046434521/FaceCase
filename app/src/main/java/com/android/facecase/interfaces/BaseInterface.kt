@@ -7,7 +7,7 @@ import com.android.facecase.detail.NormalActivity
 /**
  * @author：TianLong
  * @date：2022/6/13 13:52
- * @detail：
+ * @detail：基础接口
  */
 interface BaseInterface {
     fun <T>openActivity(clazz: Class<T>)

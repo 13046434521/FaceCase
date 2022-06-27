@@ -20,3 +20,15 @@
     }
 ```
 ### 2022-6-20
+### 2022-6-21
+#### Kotlin协程
+Glob
+suspend：挂起
+withContext
+   ·GlobalScope是生命周期是process级别的，即使Activity或Fragment已经被销毁，协程仍然在执行。所以需要绑定生命周期。
+   ·lifecycleScope只能在Activity、Fragment中使用，会绑定Activity和Fragment的生命周期
+   ·viewModelScope只能在ViewModel中使用，绑定ViewModel的生命周期
+```groovy
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'//lifecycleScope
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'//viewModelScope
+```

@@ -5,8 +5,10 @@ import android.util.Log;
 
 import com.imi.camera.camera.ImiCamera;
 import com.imi.sdk.face.Constant;
+import com.imi.sdk.face.FaceQuality;
 import com.imi.sdk.face.LivenessMode;
 import com.imi.sdk.face.OnSessionInitializeListener;
+import com.imi.sdk.face.Quality;
 import com.imi.sdk.face.QualityMode;
 import com.imi.sdk.face.QualityThreshold;
 import com.imi.sdk.face.Session;
@@ -57,7 +59,6 @@ public class SessionHelper {
         mQualityOption.setEyeCloseFactor(0.58f);
         mQualityOption.setMouthOpenFactor(0.5f);
         mQualityOption.setValidSizeRate(0.6f);
-
         mQualityOption.setBlur(0.5f);
         mQualityOption.setColorBrightLight(0.9f);
         mQualityOption.setColorDarkLight(0.1f);

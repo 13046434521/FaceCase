@@ -43,4 +43,12 @@ class MainActivity : BaseActivity() ,OnOpenCameraListener{
     fun onLiveness(view: View) {
         openActivity(LivenessActivity::class.java)
     }
+
+    fun onSpoof(view: View) {
+        openActivity(SpoofActivity::class.java)
+    }
+
+    fun onQuality(view: View) {
+        openActivity(QualityActivity::class.java)
+    }
 }

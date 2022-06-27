@@ -1,5 +1,6 @@
 package com.android.facecase.helper;
 
+import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.TextUtils;
@@ -28,6 +29,7 @@ public class FileHelper {
     private static String mFaceModelFolderPath;
     private static String mFaceImiBinFolderPath;
     private static String mFaceTestFolderPath;
+
     private FileHelper() {
         init();
     }
@@ -65,7 +67,7 @@ public class FileHelper {
 
     public String getFaceModelFolderPath() {
         if (TextUtils.isEmpty(mFaceModelFolderPath)) {
-            mFaceModelFolderPath = getSDCardFolderPath() + "FaceModel/"+ BuildConfig.SDK_VERSION+"/";
+            mFaceModelFolderPath = getSDCardFolderPath() + "FaceModel/" + BuildConfig.SDK_VERSION + "/";
         }
         mkdirs(mFaceModelFolderPath);
 
@@ -268,17 +270,17 @@ public class FileHelper {
         return byteBuffer;
     }
 
-    public ByteBuffer readLocalFileByteBuffer(@NonNull String path, int length,ByteBuffer byteBuffer) {
+    public ByteBuffer readLocalFileByteBuffer(@NonNull String path, int length, ByteBuffer byteBuffer) {
         File file = new File(path);
         try {
             // 拿到输入流
             FileInputStream inputStream = new FileInputStream(file);
             // 建立存储器
             byte[] buf = new byte[length];
-            // 读取到存储器
             inputStream.read(buf);
+            // 读取到存储器
             // 读取到ByteBuffer
-            byteBuffer.put(buf,0,length);
+            byteBuffer.put(buf, 0, length);
             byteBuffer.position(0);
             // 关闭输入流
             inputStream.close();
@@ -294,6 +296,7 @@ public class FileHelper {
 
         return byteBuffer;
     }
+
     /**
      * @param path 获取该文件夹下的所有jpg，png文件名
      * @return
@@ -329,7 +332,7 @@ public class FileHelper {
         }
         List<String> fileList = new ArrayList<>();
         for (int i = 0; i < files.length; i++) {
-            for (String name:names){
+            for (String name : names) {
                 boolean isAdd = files[i].getAbsolutePath().endsWith(name);
                 if (isAdd) {
                     fileList.add(files[i].getAbsolutePath());
@@ -339,7 +342,41 @@ public class FileHelper {
         return fileList;
     }
 
+    private void saveData(ByteBuffer dataBuffer, String dataName) {
+        boolean save = false;
+        if (dataBuffer != null) {
+            if (FileHelper.getInstance().isExceedMemorySize(100)) {
+                byte[] data = new byte[dataBuffer.remaining()];
+                dataBuffer.get(data);
+                dataBuffer.position(0);
+                save = FileHelper.getInstance().saveFileWithByte(data, FileHelper.getInstance().getFaceImageFolderPath(), dataName);
+            }
+        }
+
+        Log.d(TAG, save ? "保存成功" : "保存失败" + " " + dataName);
+    }
+    public void saveBitmap(Bitmap bitmap,String name) {
+        File f = new File(mFaceImageFolderPath, name);
+        if (f.exists()) {
+            f.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(f);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+
+            Log.d(TAG, "保存成功" + " :" + f.getName());
+        } catch (IOException e) {
+            Log.d(TAG, "保存失败" + " :" + e.toString());
+        }
+    }
+
+    public void saveBitmap(Bitmap bitmap) {
+        saveBitmap(bitmap,System.currentTimeMillis() + ".png");
+    }
+
     private static class FileHelperHolder {
-        private static FileHelper sFileHelper = new FileHelper();
+        private static final FileHelper sFileHelper = new FileHelper();
     }
 }

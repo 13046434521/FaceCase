@@ -19,7 +19,11 @@ import com.imi.camera.camera.ImiCamera
 import com.imi.camera.listener.OnFrameAvailableListener
 import com.imi.sdk.face.*
 import com.jtl.surface.gl.RgbGLSurface
-
+/**
+ * @author：TianLong
+ * @date：2022/6/13 13:52
+ * @detail：人脸Activity，实现基本人脸功能
+ */
 open class FaceActivity : BaseActivity(){
     lateinit var faceSession: Session
     var camera:ImiCamera = ImiCamera.getInstance()

@@ -15,7 +15,11 @@ import com.imi.sdk.face.FaceInfo
 import com.imi.sdk.face.FaceQuality
 import com.imi.sdk.face.LivenessResult
 import com.jtl.surface.gl.RgbGLSurface
-
+/**
+ * @author：TianLong
+ * @date：2022/6/13 13:52
+ * @detail：正常使用Activity，模组获取实时流数据
+ */
 class NormalActivity : FaceActivity() , OnFrameAvailableListener ,AlgInitInterface,AlgFaceInterface,AlgDetectInterface,AlgLivenessInterface,AlgQualityInterface,AlgFaceEndInterface{
     private val rgbGLSurface by lazy<RgbGLSurface> { findViewById(R.id.rgb_normal_surface) }
     private val contentTextView by lazy<TextView> { findViewById(R.id.tv_normal_content) }
@@ -86,6 +90,7 @@ class NormalActivity : FaceActivity() , OnFrameAvailableListener ,AlgInitInterfa
 
         contentTextView.post {
             val stringBuilder = StringBuilder()
+            stringBuilder.append(faceSession.sdkName)
             livenessResult?.let {
                 stringBuilder.append("活体：${getLivenessMsg(it)}\n ")
             }

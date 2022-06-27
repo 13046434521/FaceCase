@@ -1,10 +1,15 @@
 package com.android.facecase.helpkt
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
+import com.android.facecase.helper.FileHelper
 import com.android.facecase.interfaces.*
+import com.android.utils.ImageUtils
 import com.imi.sdk.face.*
 import com.imi.sdk.facebase.base.ResultCode
 import com.imi.sdk.facebase.utils.Rect
+import com.imi.sdk.faceid.dl.internal.ImiUtil
 import kotlin.concurrent.thread
 
 /**
@@ -14,7 +19,9 @@ import kotlin.concurrent.thread
  */
 object FaceHelper : FaceInterface {
     var TAG = "FaceTest"
+    @Volatile
     var isAlgSuccess = false
+    @Volatile
     var isFace: Boolean = false
     var algInitInterface: AlgInitInterface? = null
     var algDetectInterface: AlgDetectInterface? = null
@@ -40,7 +47,7 @@ object FaceHelper : FaceInterface {
     override fun startFaceAlg() {
         faceThread = thread {
             isFace = true
-            while (isFace) {
+            while (isFace&& !faceThread.isInterrupted) {
                 val cameraImage = algFaceInterface?.faceAlgInterface()
                 val frame = cameraImage?.frame
                 var rect: Rect?
@@ -69,6 +76,8 @@ object FaceHelper : FaceInterface {
                     )
                 }, livenessResult, quality)
             }
+
+            Log.e(TAG,"startFaceAlg over :isFace:${isFace} ")
         }
     }
 
@@ -108,13 +117,13 @@ object FaceHelper : FaceInterface {
     override fun releaseFace(session: Session?) {
         if (isFace) {
             isFace = false
-            faceThread.join(1000)
+            faceThread.interrupt()
         }
         if (isAlgSuccess) {
             session?.release()
-            isAlgSuccess = true
+            isAlgSuccess = false
         }
-
+        Log.e(TAG,"releaseFace:isFace:${isFace} isAlgSuccess:${isAlgSuccess}")
         algReleaseInterface?.releaseAlgInterface()
     }
 }

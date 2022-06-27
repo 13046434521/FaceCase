@@ -15,7 +15,7 @@ import java.nio.ByteOrder
 /**
  * @author：TianLong
  * @date：2022/6/14 16:13
- * @detail：正常输入输出（相机实时流彩色深度红外，转成需要数据）
+ * @detail：活体数据集（赵芳的那1000张图片）
  */
 class LivenessData :DataHelper<CameraFrame,CameraImage?> {
     lateinit var rgbBuffer :ByteBuffer
@@ -26,6 +26,7 @@ class LivenessData :DataHelper<CameraFrame,CameraImage?> {
     lateinit var depthPath :String
     lateinit var irPath :String
     private var count = 0
+    var isEndData = false
     val cameraImage: CameraImage by lazy {
         irRgbBuffer = ByteBuffer.allocateDirect(IMAGE_WIDTH * IMAGE_HEIGHT *3).order(ByteOrder.nativeOrder())
         rgbBuffer = ByteBuffer.allocateDirect(IMAGE_WIDTH * IMAGE_HEIGHT *3).order(ByteOrder.nativeOrder())
@@ -70,18 +71,20 @@ class LivenessData :DataHelper<CameraFrame,CameraImage?> {
     private fun handlePath() {
         count++
         rgbPath = "${FileHelper.getInstance().faceTestFolderPath}liveness/${count}_color.jpg"
-        when(count){
-            in 1 until 10->rgbPath = rgbPath.replace("${count}","000${count}")
-            in 10 until 100->rgbPath = rgbPath.replace("${count}","00${count}")
-            in 100 until 1000->rgbPath = rgbPath.replace("${count}","0${count}")
+        rgbPath = when(count){
+            in 1 until 10-> rgbPath.replace("${count}","000${count}")
+            in 10 until 100->rgbPath.replace("${count}","00${count}")
+            in 100 until 1000->rgbPath.replace("${count}","0${count}")
             else->{
-                rgbPath = "${FileHelper.getInstance().faceTestFolderPath}liveness/1000_color.jpg"
+                "${FileHelper.getInstance().faceTestFolderPath}liveness/1000_color.jpg"
             }
         }
 
         depthPath = rgbPath.replace("_color.jpg","_depth.png")
         irPath = rgbPath.replace("_color.jpg","_infrared.png")
 
-        Log.w("JTL_PATH",rgbPath)
+        isEndData = rgbPath.contains("1000")
+
+        Log.w("JTL_PATH", "$rgbPath isEndData:$isEndData")
     }
 }

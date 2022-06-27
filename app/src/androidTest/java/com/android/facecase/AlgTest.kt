@@ -39,7 +39,7 @@ class AlgTest :OnOpenCameraListener,OnSessionInitializeListener{
         countDownLatch.await()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
-        for (index in 0..10000){
+        for (index in 0 until 10000){
             count++
             cyclicBarrier.reset()
             val session = Session(appContext)

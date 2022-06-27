@@ -6,6 +6,8 @@ package com.android.facecase.helpkt
  * @detail：数据源接口
  */
 interface DataHelper<T,K> {
+    val TAG: String
+        get() = this.javaClass.name
 
     fun `输入数据` (t:T,k :K)
 

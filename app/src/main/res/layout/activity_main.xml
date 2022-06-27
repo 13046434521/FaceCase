@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="正常检测"
-        app:layout_constraintTop_toBottomOf="@id/btn_main_liveness"
+        app:layout_constraintBottom_toTopOf="@id/btn_main_liveness"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,10 +22,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="活体测试"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_main_spoof"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_main_normal"
         android:onClick="onLiveness"/>
 
+    <Button
+        android:id="@+id/btn_main_spoof"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="非活体测试"
+        app:layout_constraintBottom_toTopOf="@+id/btn_main_quality"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_main_liveness"
+        android:onClick="onSpoof"/>
+
+    <Button
+        android:id="@+id/btn_main_quality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="质量评估测试"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_main_spoof"
+        android:onClick="onQuality"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
